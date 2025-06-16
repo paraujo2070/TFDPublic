@@ -1,0 +1,190 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="container mx-auto space-y-8">
+
+    <!-- Seção de Filtro e Ações -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
+        Gerenciar Motoristas
+      </h2>
+      <form (ngSubmit)="buscarMotoristas()" class="space-y-4 sm:space-y-0 sm:flex sm:space-x-4 sm:items-end">
+        <div class="flex-grow">
+          <label for="filtroNome" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Filtrar por Nome
+          </label>
+          <input id="filtroNome" name="filtroNome" type="text" [(ngModel)]="filtroNome"
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Digite o nome do motorista">
+        </div>
+        <button type="submit"
+                [disabled]="isLoading"
+                class="w-full sm:w-auto flex justify-center py-3 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+          <span *ngIf="!isLoading">Buscar</span>
+          <span *ngIf="isLoading">Buscando...</span>
+        </button>
+        <button type="button" (click)="listarTodosMotoristas()" [disabled]="isLoading"
+                class="w-full sm:w-auto flex justify-center py-3 px-6 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+          Listar Todos
+        </button>
+      </form>
+    </div>
+
+    <!-- Seção de Listagem de Motoristas -->
+    <div *ngIf="!motoristaParaEdicao" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        Motoristas Encontrados
+      </h3>
+      <div *ngIf="isLoading" class="text-center py-4 text-gray-600 dark:text-gray-400">Carregando motoristas...</div>
+      
+      <div *ngIf="!isLoading && motoristasFiltrados.length === 0" class="text-center py-4 text-gray-600 dark:text-gray-400">
+        Nenhum motorista encontrado com os critérios informados.
+      </div>
+
+      <div *ngIf="!isLoading && motoristasFiltrados.length > 0" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nome</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">CPF</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">CNH</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Validade CNH</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Categoria</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Telefone</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Placa Veículo</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let motorista of motoristasFiltrados" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ motorista.nomeCompleto }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ motorista.cpf }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ motorista.numeroCnh }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ motorista.validadeCnh | date:'dd/MM/yyyy' }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                <span *ngIf="motorista.tipoA">A </span>
+                <span *ngIf="motorista.tipoB">B </span>
+                <span *ngIf="motorista.tipoC">C </span>
+                <span *ngIf="motorista.tipoD">D </span>
+                <span *ngIf="motorista.tipoE">E </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ motorista.telefone }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ motorista.placaVeiculo }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                <button (click)="selecionarParaEdicao(motorista)"
+                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-150 ease-in-out">
+
+                  Editar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Seção de Edição de Motorista -->
+    <div *ngIf="motoristaParaEdicao && formularioEdicao" class="bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+          Editar Motorista: {{ motoristaParaEdicao.nomeCompleto }}
+        </h2>
+      </div>
+      <form class="mt-8 space-y-6" (ngSubmit)="salvarEdicao()">
+        <!-- Dados Pessoais -->
+        <div>
+          <label for="editNomeCompleto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
+          <input id="editNomeCompleto" name="editNomeCompleto" type="text" [(ngModel)]="formularioEdicao.nomeCompleto" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="editCpf" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF</label>
+          <input id="editCpf" name="editCpf" type="text" [(ngModel)]="formularioEdicao.cpf" required pattern="\d{11}" maxlength="11"
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="editDataNascimento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data de Nascimento</label>
+          <input id="editDataNascimento" name="editDataNascimento" type="date" [(ngModel)]="formularioEdicao.dataNascimento" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+         <div>
+          <label for="editNomeMae" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Mãe</label>
+          <input id="editNomeMae" name="editNomeMae" type="text" [(ngModel)]="formularioEdicao.nomeMae" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="editTelefone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telefone</label>
+          <input id="editTelefone" name="editTelefone" type="tel" [(ngModel)]="formularioEdicao.telefone" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Dados da CNH -->
+        <div class="mt-8 space-y-6">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Dados da CNH</h3>
+          <div>
+            <label for="editNumeroCnh" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número da CNH</label>
+            <input id="editNumeroCnh" name="editNumeroCnh" type="text" [(ngModel)]="formularioEdicao.numeroCnh" required pattern="\d*" maxlength="11"
+                   class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="editValidadeCnh" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Validade da CNH</label>
+            <input id="editValidadeCnh" name="editValidadeCnh" type="date" [(ngModel)]="formularioEdicao.validadeCnh" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <fieldset class="pt-3 pb-1 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700">
+            <legend class="sr-only">Tipo de Habilitação</legend>
+            <div class="text-sm text-gray-700 dark:text-gray-300 mb-2">Categoria da Habilitação:</div>
+            <div class="space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
+              <div class="flex items-center">
+                <input id="editTipoA" name="editTipoA" type="checkbox" [(ngModel)]="formularioEdicao.tipoA" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoA" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">A</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoB" name="editTipoB" type="checkbox" [(ngModel)]="formularioEdicao.tipoB" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoB" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">B</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoC" name="editTipoC" type="checkbox" [(ngModel)]="formularioEdicao.tipoC" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoC" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">C</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoD" name="editTipoD" type="checkbox" [(ngModel)]="formularioEdicao.tipoD" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoD" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">D</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoE" name="editTipoE" type="checkbox" [(ngModel)]="formularioEdicao.tipoE" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoE" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">E</label>
+              </div>
+            </div>
+          </fieldset>
+          <div>
+            <label for="editEar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Exerce Atividade Remunerada (EAR)?</label>
+            <select id="editEar" name="editEar" [(ngModel)]="formularioEdicao.ear" required
+                    class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="" disabled>Selecione</option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+          </div>
+          <div>
+            <label for="editPlacaVeiculo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Placa do Veículo Vinculado</label>
+            <input id="editPlacaVeiculo" name="editPlacaVeiculo" type="text" [(ngModel)]="formularioEdicao.placaVeiculo" required
+                   maxlength="7" pattern="[A-Za-z]{3}[0-9][A-Za-z0-9][0-9]{2}|[A-Za-z]{3}[0-9]{4}"
+                   class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end space-x-4 pt-4">
+          <button type="button" (click)="cancelarEdicao()"
+                  class="group relative py-3 px-6 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="isLoading"
+                  class="group relative py-3 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+            <span *ngIf="!isLoading">Salvar Alterações</span>
+            <span *ngIf="isLoading">Salvando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

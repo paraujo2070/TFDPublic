@@ -1,0 +1,52 @@
+ <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+        Redefinir Senha com Chave de Recuperação
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+        Para redefinir sua senha, digite seu e-mail e a chave de recuperação única que foi fornecida a você.
+      </p>
+    </div>
+    <form class="mt-8 space-y-6" (ngSubmit)="solicitarRedefinicao()"> <!-- Você precisará criar o método solicitarRedefinicao() no seu .ts -->
+        <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Endereço de E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="seuemail@exemplo.com">
+      </div>
+   
+        <div>
+        <label for="chaveRecuperacao" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Chave de Recuperação</label>
+        <input id="chaveRecuperacao" name="chaveRecuperacao" type="text" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Digite sua chave de recuperação única">
+      </div>
+      
+       <div>
+        <label for="novaSenha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nova Senha</label>
+        <input id="novaSenha" name="novaSenha" type="password" autocomplete="new-password" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Digite sua nova senha">
+      </div>
+
+      <div>
+        <label for="confirmarNovaSenha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmar Nova Senha</label>
+        <input id="confirmarNovaSenha" name="confirmarNovaSenha" type="password" autocomplete="new-password" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Confirme sua nova senha">
+      </div>
+
+      <div>
+        <button type="submit"
+                class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+          Verificar Chave e Redefinir Senha
+        </button>
+      </div>
+       <div class="text-sm text-center">
+        <a routerLink="/auth/login" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+          Lembrou a senha? Voltar para o Login
+        </a>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,172 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 sm:p-6 lg:p-8 flex flex-col items-center">
+    <div class="w-full max-w-4xl bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 sm:p-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
+            Cadastro de Viagem para Hemodiálise
+        </h1>
+
+        <form [formGroup]="viagemForm" (ngSubmit)="onSubmit()" class="space-y-8">
+
+            <!-- Dados do Paciente -->
+            <section formGroupName="paciente" class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dados do Paciente</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="pacienteNome"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome Completo</label>
+                        <input type="text" id="pacienteNome" formControlName="nomeCompleto"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="pacienteNascimento"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de
+                            Nascimento</label>
+                        <input type="date" id="pacienteNascimento" formControlName="dataNascimento"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="pacienteNomeMae"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome da Mãe</label>
+                        <input type="text" id="pacienteNomeMae" formControlName="nomeMae"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="pacienteCpf"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">CPF</label>
+                        <input type="text" id="pacienteCpf" formControlName="cpf"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="pacienteSus"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cartão Nacional do
+                            SUS</label>
+                        <input type="text" id="pacienteSus" formControlName="cartaoSus"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="pacienteTelefone"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Número de
+                            Telefone</label>
+                        <input type="tel" id="pacienteTelefone" formControlName="telefone"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                </div>
+
+                <div formGroupName="endereco" class="mt-6 space-y-6">
+                    <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Endereço do Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="pacienteRua"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rua</label>
+                            <input type="text" id="pacienteRua" formControlName="rua"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="pacienteNumero"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Número</label>
+                            <input type="text" id="pacienteNumero" formControlName="numero"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="pacienteBairro"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bairro</label>
+                            <input type="text" id="pacienteBairro" formControlName="bairro"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="pacienteCidade"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cidade</label>
+                            <input type="text" id="pacienteCidade" formControlName="cidade"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="pacienteEstado"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>
+                            <input type="text" id="pacienteEstado" formControlName="estado"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="pacienteCep"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">CEP</label>
+                            <input type="text" id="pacienteCep" formControlName="cep"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dados do Acompanhante -->
+            <section formGroupName="acompanhante" class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dados do Acompanhante (Opcional)
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="acompanhanteNome"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome Completo</label>
+                        <input type="text" id="acompanhanteNome" formControlName="nomeCompleto"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="acompanhanteCpf"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">CPF</label>
+                        <input type="text" id="acompanhanteCpf" formControlName="cpf"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="acompanhanteSus"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cartão Nacional do
+                            SUS</label>
+                        <input type="text" id="acompanhanteSus" formControlName="cartaoSus"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dados da Localidade da Hemodiálise -->
+            <section formGroupName="hemodialise" class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dados da Localidade da
+                    Hemodiálise</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="hemodialiseNomeLocal"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome do Local</label>
+                        <input type="text" id="hemodialiseNomeLocal" formControlName="nomeLocal"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div>
+                        <label for="hemodialiseTelefoneLocal"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telefone do Local</label>
+                        <input type="tel" id="hemodialiseTelefoneLocal" formControlName="telefoneLocal"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="hemodialiseEnderecoLocal"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Endereço do Local</label>
+                        <input type="text" id="hemodialiseEnderecoLocal" formControlName="enderecoLocal"
+                            class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                    </div>
+                </div>
+
+                <div formGroupName="dias" class="mt-6">
+                    <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">Dias da Hemodiálise</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                        <div *ngFor="let dia of diasSemana" class="flex items-center">
+                            <input type="checkbox" [id]="'dia-' + dia.id" [formControlName]="dia.id"
+                                class="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:bg-gray-700 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
+                            <label [for]="'dia-' + dia.id"
+                                class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ dia.label }}</label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <div class="flex justify-end pt-4">
+                <button type="submit" [disabled]="viagemForm.invalid"
+                    class="px-8 py-3 text-lg font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out">
+                    Cadastrar Viagem
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>

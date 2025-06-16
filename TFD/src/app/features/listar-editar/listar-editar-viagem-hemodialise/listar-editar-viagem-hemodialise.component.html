@@ -1,0 +1,319 @@
+<div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div
+            class="max-w-5xl w-full space-y-8 bg-white dark:bg-gray-800 p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl mx-auto">
+
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100">
+                Gereciar Viagens para Hemodiálise
+            </h2>
+
+            <!-- Filter Section -->
+            <section class="mt-8 mb-6 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3
+                    class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6 border-b border-gray-300 dark:border-gray-600 pb-3">
+                    Filtrar Viagens</h3>
+                <form (ngSubmit)="aplicarFiltrosViagem()" #filtroViagemForm="ngForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                        <div>
+                            <label for="filtroNomePacienteViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                                Paciente</label>
+                            <input type="text" id="filtroNomePacienteViagem" name="filtroNomePacienteViagem"
+                                [(ngModel)]="filtrosViagem.nomePaciente"
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Digite o nome do paciente">
+                        </div>
+
+                        <div>
+                            <label for="filtroDataViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data</label>
+                            <input type="date" id="filtroDataViagem" name="filtroDataViagem"
+                                [(ngModel)]="filtrosViagem.data"
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+
+                        <!-- Espaço reservado para manter o layout de 3 colunas, se necessário -->
+                        <div></div>
+                    </div>
+                    <div class="mt-6 flex flex-col sm:flex-row sm:justify-end sm:space-x-3 space-y-3 sm:space-y-0">
+                        <button type="button" (click)="listarTodasViagens()"
+                            class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-500 shadow-sm px-4 py-2 bg-white dark:bg-gray-600 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                            Listar Tudo
+                        </button>
+                        <button type="submit"
+                            class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- List of Viagens -->
+            <section *ngIf="!viagemEditavel" class="mt-8">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Viagens Encontradas</h3>
+                <div *ngIf="isLoadingViagens" class="text-center py-10">
+                    <p class="text-gray-600 dark:text-gray-400">Carregando viagens...</p>
+                    <!-- Adicionar spinner aqui se desejar -->
+                </div>
+
+                <div *ngIf="!isLoadingViagens && viagensFiltradas && viagensFiltradas.length > 0; else nenhumaViagemEncontrada"
+                    class="space-y-4">
+                    <div *ngFor="let viagem of viagensFiltradas"
+                        class="p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <div class="mb-3 sm:mb-0">
+                                <p class="text-lg font-semibold text-indigo-600 dark:text-indigo-400">{{
+                                    viagem.paciente.nomeCompleto || 'Paciente não informado' }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Data de Referência: <span class="font-medium">{{ viagem.dataReferencia |
+                                        date:'dd/MM/yyyy' }}</span> <!-- Supondo um campo dataReferencia -->
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Local Hemodiálise: <span class="font-medium">{{ viagem.hemodialise.nomeLocal ||
+                                        'Não informado' }}</span>
+                                </p>
+                            </div>
+                            <div
+                                class="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-3 w-full sm:w-auto">
+                                <span [ngClass]="{
+                                    'px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full mb-2 sm:mb-0': true,
+                                    'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100': viagem.status === 'ativo',
+                                    'bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100': viagem.status === 'inativo',
+                                    'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200': viagem.status !== 'ativo' && viagem.status !== 'inativo'
+                                }">
+                                    {{ viagem.status | titlecase }}
+                                </span>
+                                <button (click)="selecionarViagemParaEdicao(viagem)"
+                                    class="w-full sm:w-auto text-sm text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium py-2 px-3 rounded-md border border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors duration-150">
+                                    Editar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #nenhumaViagemEncontrada>
+                    <div *ngIf="!isLoadingViagens && (!viagensFiltradas || viagensFiltradas.length === 0)"
+                        class="text-center py-10">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Nenhuma viagem encontrada
+                        </h3>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {{ filtroViagemAplicado ? 'Tente ajustar seus filtros de busca.' : 'Não há viagens
+                            cadastradas ou os filtros não retornaram resultados.' }}
+                        </p>
+                    </div>
+                </ng-template>
+            </section>
+
+            <!-- Edit Form Section -->
+            <div *ngIf="viagemEditavel" class="mt-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
+                    Editar Viagem para Hemodiálise
+                </h2>
+
+                <form [formGroup]="editViagemForm" (ngSubmit)="salvarAlteracoesViagem()" class="space-y-8">
+
+                    <!-- Dados do Paciente -->
+                    <section formGroupName="paciente"
+                        class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dados do Paciente</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="pacienteNomeEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome
+                                    Completo</label>
+                                <input type="text" id="pacienteNomeEdit" formControlName="nomeCompleto"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                <!-- Adicionar mensagens de validação aqui, se necessário -->
+                            </div>
+                            <div>
+                                <label for="pacienteNascimentoEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de
+                                    Nascimento</label>
+                                <input type="date" id="pacienteNascimentoEdit" formControlName="dataNascimento"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="pacienteNomeMaeEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome da
+                                    Mãe</label>
+                                <input type="text" id="pacienteNomeMaeEdit" formControlName="nomeMae"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="pacienteCpfEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">CPF</label>
+                                <input type="text" id="pacienteCpfEdit" formControlName="cpf"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="pacienteSusEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cartão Nacional
+                                    do SUS</label>
+                                <input type="text" id="pacienteSusEdit" formControlName="cartaoSus"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="pacienteTelefoneEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Número de
+                                    Telefone</label>
+                                <input type="tel" id="pacienteTelefoneEdit" formControlName="telefone"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                        </div>
+
+                        <div formGroupName="endereco" class="mt-6 space-y-6">
+                            <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300">Endereço do Paciente</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="pacienteRuaEdit"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rua</label>
+                                    <input type="text" id="pacienteRuaEdit" formControlName="rua"
+                                        class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                </div>
+                                <div>
+                                    <label for="pacienteNumeroEdit"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Número</label>
+                                    <input type="text" id="pacienteNumeroEdit" formControlName="numero"
+                                        class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                </div>
+                                <div>
+                                    <label for="pacienteBairroEdit"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bairro</label>
+                                    <input type="text" id="pacienteBairroEdit" formControlName="bairro"
+                                        class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                </div>
+                                <div>
+                                    <label for="pacienteCidadeEdit"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cidade</label>
+                                    <input type="text" id="pacienteCidadeEdit" formControlName="cidade"
+                                        class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                </div>
+                                <div>
+                                    <label for="pacienteEstadoEdit"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>
+                                    <input type="text" id="pacienteEstadoEdit" formControlName="estado"
+                                        class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                </div>
+                                <div>
+                                    <label for="pacienteCepEdit"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">CEP</label>
+                                    <input type="text" id="pacienteCepEdit" formControlName="cep"
+                                        class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dados do Acompanhante -->
+                    <section formGroupName="acompanhante"
+                        class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dados do Acompanhante
+                            (Opcional)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="acompanhanteNomeEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome
+                                    Completo</label>
+                                <input type="text" id="acompanhanteNomeEdit" formControlName="nomeCompleto"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="acompanhanteCpfEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">CPF</label>
+                                <input type="text" id="acompanhanteCpfEdit" formControlName="cpf"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="acompanhanteSusEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cartão Nacional
+                                    do SUS</label>
+                                <input type="text" id="acompanhanteSusEdit" formControlName="cartaoSus"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dados da Localidade da Hemodiálise -->
+                    <section formGroupName="hemodialise"
+                        class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dados da Localidade da
+                            Hemodiálise</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="hemodialiseNomeLocalEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome do
+                                    Local</label>
+                                <input type="text" id="hemodialiseNomeLocalEdit" formControlName="nomeLocal"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div>
+                                <label for="hemodialiseTelefoneLocalEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telefone do
+                                    Local</label>
+                                <input type="tel" id="hemodialiseTelefoneLocalEdit" formControlName="telefoneLocal"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="hemodialiseEnderecoLocalEdit"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Endereço do
+                                    Local</label>
+                                <input type="text" id="hemodialiseEnderecoLocalEdit" formControlName="enderecoLocal"
+                                    class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:text-gray-200">
+                            </div>
+                        </div>
+
+                        <div formGroupName="dias" class="mt-6">
+                            <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">Dias da Hemodiálise
+                            </h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                                <div *ngFor="let dia of diasSemana" class="flex items-center">
+                                    <input type="checkbox" [id]="'diaEdit-' + dia.id" [formControlName]="dia.id"
+                                        class="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:bg-gray-700 dark:focus:ring-blue-600 dark:ring-offset-gray-800 cursor-pointer">
+                                    <label [for]="'diaEdit-' + dia.id"
+                                        class="ml-2 block text-sm text-gray-900 dark:text-gray-300 cursor-pointer">{{
+                                        dia.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Status da Viagem/Tratamento -->
+                    <section class="p-6 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Status do Tratamento
+                        </h3>
+                        <div>
+                            <label for="statusViagemEdit"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                            <select id="statusViagemEdit" formControlName="status"
+                                class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-gray-200">
+                                <option value="" disabled>Selecione o status</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                            <!-- Adicionar mensagens de validação aqui, se necessário -->
+                        </div>
+                    </section>
+
+                    <div
+                        class="flex flex-col sm:flex-row-reverse sm:space-x-reverse sm:space-x-3 pt-4 space-y-3 sm:space-y-0">
+                        <button type="submit" [disabled]="editViagemForm.invalid || isLoadingSalvarViagem"
+                            class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-8 py-3 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed sm:text-lg">
+                            <span *ngIf="!isLoadingSalvarViagem">Salvar Alterações</span>
+                            <span *ngIf="isLoadingSalvarViagem">Salvando...</span>
+                        </button>
+                        <button type="button" (click)="cancelarEdicaoViagem()" [disabled]="isLoadingSalvarViagem"
+                            class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-500 shadow-sm px-6 py-3 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 sm:text-lg">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

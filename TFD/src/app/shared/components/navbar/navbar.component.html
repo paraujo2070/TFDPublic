@@ -1,0 +1,118 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-800"> <!-- Adicionado dark:bg-gray-800 para consistência -->
+  <nav class="bg-gray-800 text-white shadow-lg">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex-shrink-0 flex items-center">
+          <a routerLink="/home/pagina-inicial" class="flex items-center text-white hover:text-gray-300 transition-colors duration-200">
+            <img src="logo.svg" alt="Logo Sistema TFD" class="h-12 w-auto mr-2">
+          </a>
+        </div>
+
+<!-- Menu Desktop -->
+        <div class="hidden md:flex md:items-center md:space-x-2 lg:space-x-3 relative">
+          <a routerLink="/home/pagina-inicial" routerLinkActive="bg-gray-900 text-white" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Início</a>
+          <!-- Dropdown de Cadastro -->
+          <div class="relative" (mouseenter)="openDropdown('cadastro')" (mouseleave)="closeDropdown('cadastro')"> <!-- Corrigido acesso à propriedade -->
+            <button type="button" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+              Cadastro
+              <svg class="ml-1 h-4 w-4 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div [class.hidden]="!isDropdownOpen['cadastro']" class="origin-top-right absolute z-50 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <a routerLink="/cadastros/cadastro" routerLinkActive="bg-gray-100 text-gray-900" [routerLinkActiveOptions]="{exact: true}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-200 pb-1 mb-1">Cadastrar Usuário do Sistema</a> <!-- Corrigido acesso à propriedade -->
+              <a routerLink="/cadastros/cadastrar-motorista" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Motorista</a>
+              <a routerLink="/cadastros/cadastrar-veiculo" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Veículo</a>
+              <a routerLink="/tfd/cadastrar-viagem-ambulancia" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Viagem Ambulância</a>
+              <a routerLink="/tfd/cadastrar-viagem-extra" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Viagem Extra</a>
+              <a routerLink="/tfd/cadastrar-viagem" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-200 pb-1 mb-1">Cad. Viagem TFD</a>
+              <a routerLink="/tfd/cadastrar-paciente-TFD" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Paciente TFD</a>
+              <a routerLink="/tfd/cadastrar-documento-TFD" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Declaração TFD</a>
+              <a routerLink="/tfd/cadastrar-viagem-hemodialise" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cad. Viagem Hemodiálise</a>
+              </div>
+          </div>
+          <div class="relative" (mouseenter)="openDropdown('gerenciar')" (mouseleave)="closeDropdown('gerenciar')">
+            <button type="button" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+              Gerenciar
+              <svg class="ml-1 h-4 w-4 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div [class.hidden]="!isDropdownOpen['gerenciar']" class="origin-top-right absolute z-50 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <a routerLink="/listar-editar/gerenciar-motoristas" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Motoristas</a>
+              <a routerLink="/listar-editar/gerenciar-veiculos" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Veículo</a>
+              <a routerLink="/listar-editar/gerenciar-viagem-tfd" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Viagem TFD</a>
+              <a routerLink="/listar-editar/gerenciar-paciente-tfd" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Paciente TFD</a>
+              <a routerLink="/listar-editar/gerenciar-declaracao-tfd" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Declaração TFD</a>
+              <a routerLink="/listar-editar/gerenciar-viagem-hemodialise" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Viagem Hemodiálise</a>
+              <a routerLink="/listar-editar/gerenciar-viagem-ambulancia" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Viagem Ambulância</a>
+              <a routerLink="/listar-editar/gerenciar-viagem-extra" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Viagem Extra</a>
+              </div>
+          </div>
+          <div class="relative" (mouseenter)="openDropdown('configuracoes')" (mouseleave)="closeDropdown('configuracoes')">
+            <button type="button" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+              Configurações
+              <svg class="ml-1 h-4 w-4 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div [class.hidden]="!isDropdownOpen['configuracoes']" class="origin-top-right absolute z-50 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <a routerLink="/auth/nav/alterar-senha" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Alterar Senha</a>
+              <a routerLink="/listar-editar/gerenciar-usuarios-sistema" routerLinkActive="bg-gray-100 text-gray-900" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Gerenciar Usuários do Sistema</a>
+              </div>
+          </div>
+          <a routerLink="/tfd/relatorio-pagamento-tfd" routerLinkActive="bg-gray-900 text-white" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Relatório Pag. TFD</a>
+          <button (click)="logout()" class="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors duration-200">Sair</button>
+        </div>
+
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-button" type="button"
+            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors duration-200"
+            aria-controls="mobile-menu" [attr.aria-expanded]="isMobileMenuOpen" (click)="toggleMobileMenu()">
+            <span class="sr-only">Abrir menu principal</span>
+            <svg id="icon-menu-closed" [class.hidden]="isMobileMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+            <svg id="icon-menu-open" [class.hidden]="!isMobileMenuOpen" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+   <div class="md:hidden border-t border-gray-700" id="mobile-menu" [class.hidden]="!isMobileMenuOpen">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a routerLink="/home/oagina-inicial" routerLinkActive="bg-gray-900 text-white" [routerLinkActiveOptions]="{exact: true}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Início</a>
+        <a routerLink="/cadastros/cadastro" routerLinkActive="bg-gray-900 text-white" [routerLinkActiveOptions]="{exact: true}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cadastro</a>
+        <a routerLink="/cadastros/cadastrar-motorista" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cad. Motorista</a>
+        <a routerLink="/cadastros/cadastrar-veiculo" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cad. Veículo</a>
+        <a routerLink="/tfd/cadastrar-viagem" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cad. Viagem</a>
+        <a routerLink="/tfd/cadastrar-paciente-TFD" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cad. Paciente TFD</a>
+        <a routerLink="/tfd/cadastrar-documento-TFD" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cad. Documento TFD</a>
+        <a routerLink="/tfd/cadastrar-viagem-hemodialise" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cad. Viagem Hemodiálise</a>
+        <a routerLink="/tfd/relatorio-pagamento-tfd" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Relatório Pag. TFD</a>
+        <a routerLink="/listar-editar/gerenciar-motoristas" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Motoristas</a>
+        <a routerLink="/listar-editar/gerenciar-veiculos" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Veículo</a>
+        <a routerLink="/listar-editar/gerenciar-viagem-tfd" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Viagem TFD</a>
+        <a routerLink="/listar-editar/gerenciar-paciente-tfd" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Paciente TFD</a>
+        <a routerLink="/listar-editar/gerenciar-declaracao-tfd" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Declaração TFD</a>
+        <a routerLink="/listar-editar/gerenciar-viagem-hemodialise" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Viagem Hemodiálise</a>
+        <a routerLink="/tfd/cadastrar-viagem-ambulancia" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Cadastrar Viagem de Ambulância</a>
+        <a routerLink="/tfd/cadastrar-viagem-extra" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">cadastrar Viagem Extra</a>
+        <a routerLink="/listar-editar/gerenciar-viagem-ambulancia" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Viagem Ambulância</a>
+        <a routerLink="/listar-editar/gerenciar-viagem-extra" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Viagem Extra</a>
+        <a routerLink="/auth/nav/alterar-senha" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Alterar Senha</a>
+        <a routerLink="/listar-editar/gerenciar-usuarios-sistema" routerLinkActive="bg-gray-900 text-white" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">Gerenciar Usuários do Sistema</a>
+        <button (click)="logout()" class="block w-full text-left mt-1 px-3 py-2 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition-colors duration-200">Sair</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- O conteúdo da rota filha será renderizado aqui -->
+  <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <router-outlet></router-outlet>
+  </main>
+</div>

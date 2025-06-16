@@ -1,0 +1,380 @@
+<div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-2xl">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
+                Cadastro de Paciente TFD
+            </h2>
+
+            <form (ngSubmit)="cadastrarPaciente()" #pacienteForm="ngForm" class="space-y-8">
+
+                <!-- Dados Pessoais do Paciente -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Dados Pessoais
+                        do Paciente</h3>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="nomePaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo do
+                                Paciente</label>
+                            <input type="text" id="nomePaciente" name="nomePaciente" [(ngModel)]="paciente.nome"
+                                required
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome completo do paciente">
+                        </div>
+                        <div>
+                            <label for="cpfPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF do
+                                Paciente</label>
+                            <input type="text" id="cpfPaciente" name="cpfPaciente" [(ngModel)]="paciente.cpf" required
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="000.000.000-00">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Endereço do Paciente -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Endereço do
+                        Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="cepPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CEP</label>
+                            <input type="text" id="cepPaciente" name="cepPaciente" [(ngModel)]="paciente.endereco.cep"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="00000-000">
+                        </div>
+                        <div>
+                            <label for="ruaPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rua</label>
+                            <input type="text" id="ruaPaciente" name="ruaPaciente" [(ngModel)]="paciente.endereco.rua"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome da rua">
+                        </div>
+                        <div>
+                            <label for="numeroPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
+                            <input type="text" id="numeroPaciente" name="numeroPaciente"
+                                [(ngModel)]="paciente.endereco.numero"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: 123, S/N">
+                        </div>
+                        <div>
+                            <label for="complementoPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Complemento</label>
+                            <input type="text" id="complementoPaciente" name="complementoPaciente"
+                                [(ngModel)]="paciente.endereco.complemento"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Apto, Bloco, Casa">
+                        </div>
+                        <div>
+                            <label for="bairroPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bairro</label>
+                            <input type="text" id="bairroPaciente" name="bairroPaciente"
+                                [(ngModel)]="paciente.endereco.bairro"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome do bairro">
+                        </div>
+                        <div>
+                            <label for="cidadePaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cidade</label>
+                            <input type="text" id="cidadePaciente" name="cidadePaciente"
+                                [(ngModel)]="paciente.endereco.cidade"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome da cidade">
+                        </div>
+                        <div>
+                            <label for="estadoResidencia"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
+                            <select id="estadoResidencia" name="estadoResidencia" required
+                                class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="" disabled selected class="text-gray-500 dark:text-gray-400">Selecione o
+                                    Estado</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dados Bancários do Paciente -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Dados
+                        Bancários do Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nomeBanco"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                                Banco</label>
+                            <input type="text" id="nomeBanco" name="nomeBanco"
+                                [(ngModel)]="paciente.dadosBancarios.nomeBanco"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: Banco do Brasil">
+                        </div>
+                        <div>
+                            <label for="agencia"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número da
+                                Agência</label>
+                            <input type="text" id="agencia" name="agencia" [(ngModel)]="paciente.dadosBancarios.agencia"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: 0000">
+                        </div>
+                        <div>
+                            <label for="conta"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número da
+                                Conta</label>
+                            <input type="text" id="conta" name="conta" [(ngModel)]="paciente.dadosBancarios.conta"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: 00000">
+                        </div>
+                        <div>
+                            <label for="digitoConta"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dígito da
+                                Conta</label>
+                            <input type="text" id="digitoConta" name="digitoConta"
+                                [(ngModel)]="paciente.dadosBancarios.digitoConta"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: 0,8,4">
+                        </div>
+                        <div>
+                            <label for="tipoConta"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo da
+                                Conta</label>
+                            <select id="tipoConta" name="tipoConta" [(ngModel)]="paciente.dadosBancarios.tipoConta"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <option value="CORRENTE">Conta Corrente</option>
+                                <option value="POUPANCA">Conta Poupança</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="cpfTitular"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF do
+                                Titular da Conta</label>
+                            <input type="text" id="cpfTitular" name="cpfTitular"
+                                [(ngModel)]="paciente.dadosBancarios.cpfTitular"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="000.000.000-00">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="nomeTitular"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome
+                                Completo do Titular da Conta</label>
+                            <input type="text" id="nomeTitular" name="nomeTitular"
+                                [(ngModel)]="paciente.dadosBancarios.nomeTitular"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome completo do titular">
+                        </div>
+                        <div class="md:col-span-2 flex items-center mt-2">
+                            <input type="checkbox" id="cpfPix" name="cpfPix"
+                                [(ngModel)]="paciente.dadosBancarios.cpfPix"
+                                class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:bg-gray-700">
+                            <label for="cpfPix" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+                                CPF do titular é a chave PIX
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dados do Acompanhante (Opcional) -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Dados do
+                        Acompanhante (Opcional)</h3>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="nomeAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo do
+                                Acompanhante</label>
+                            <input type="text" id="nomeAcompanhante" name="nomeAcompanhante"
+                                [(ngModel)]="acompanhante.nome"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome completo do acompanhante">
+                        </div>
+                        <div>
+                            <label for="cpfAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF do
+                                Acompanhante</label>
+                            <input type="text" id="cpfAcompanhante" name="cpfAcompanhante"
+                                [(ngModel)]="acompanhante.cpf"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="000.000.000-00">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Endereço do Acompanhante -->
+                <section>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">Endereço do Acompanhante</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="cepAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CEP</label>
+                            <input type="text" id="cepAcompanhante" name="cepAcompanhante"
+                                [(ngModel)]="acompanhante.endereco.cep"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="00000-000">
+                        </div>
+                        <div>
+                            <label for="ruaAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rua</label>
+                            <input type="text" id="ruaAcompanhante" name="ruaAcompanhante"
+                                [(ngModel)]="acompanhante.endereco.rua"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome da rua">
+                        </div>
+                        <div>
+                            <label for="numeroAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
+                            <input type="text" id="numeroAcompanhante" name="numeroAcompanhante"
+                                [(ngModel)]="acompanhante.endereco.numero"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: 123, S/N">
+                        </div>
+                        <div>
+                            <label for="complementoAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Complemento</label>
+                            <input type="text" id="complementoAcompanhante" name="complementoAcompanhante"
+                                [(ngModel)]="acompanhante.endereco.complemento"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Apto, Bloco, Casa">
+                        </div>
+                        <div>
+                            <label for="bairroAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bairro</label>
+                            <input type="text" id="bairroAcompanhante" name="bairroAcompanhante"
+                                [(ngModel)]="acompanhante.endereco.bairro"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome do bairro">
+                        </div>
+                        <div>
+                            <label for="cidadeAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cidade</label>
+                            <input type="text" id="cidadeAcompanhante" name="cidadeAcompanhante"
+                                [(ngModel)]="acompanhante.endereco.cidade"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome da cidade">
+                        </div>
+                        <div>
+                            <label for="estadoResidencia"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
+                            <select id="estadoResidencia" name="estadoResidencia" required
+                                class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="" disabled selected class="text-gray-500 dark:text-gray-400">Selecione o
+                                    Estado</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Outras Informações -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Outras
+                        Informações</h3>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status do
+                                Paciente</label>
+                            <div class="flex items-center mt-2">
+                                <input id="statusAtivo" name="statusPaciente" type="radio" [value]="true"
+                                    [(ngModel)]="paciente.ativo"
+                                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                                <label for="statusAtivo" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+                                    Ativo
+                                </label>
+                                <input id="statusInativo" name="statusPaciente" type="radio" [value]="false"
+                                    [(ngModel)]="paciente.ativo"
+                                    class="ml-6 focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                                <label for="statusInativo" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+                                    Inativo
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="comprovantes"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Laudo Médico
+                                (PDF)</label>
+                            <input type="file" id="comprovantes" name="comprovantes" (change)="onFileSelected($event)"
+                                multiple accept=".pdf"
+                                class="block w-full text-sm text-gray-500 dark:text-gray-400
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-md file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-indigo-50 dark:file:bg-indigo-900 file:text-indigo-700 dark:file:text-indigo-300
+                            hover:file:bg-indigo-100 dark:hover:file:bg-indigo-800
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                            <div *ngIf="arquivosSelecionados.length > 0"
+                                class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                <p>Arquivos selecionados:</p>
+                                <ul>
+                                    <li *ngFor="let arquivo of arquivosSelecionados">{{ arquivo.name }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Botão de Cadastro -->
+                <div class="pt-6">
+                    <button type="submit" [disabled]="!pacienteForm.form.valid"
+                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 dark:disabled:bg-gray-600">
+                        Cadastrar Paciente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>

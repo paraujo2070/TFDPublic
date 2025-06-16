@@ -1,0 +1,424 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl w-full space-y-8 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100"
+                [textContent]="tituloPagina">
+            </h2>
+        </div>
+
+        <!-- Seção de Filtros -->
+        <div class="mt-8 mb-6 p-6 bg-gray-50 dark:bg-gray-750 rounded-lg shadow">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Filtrar Viagens</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 items-end">
+
+                <!-- Filtro por Nome do Paciente -->
+                <div class="lg:col-span-1 md:col-span-2">
+                    <label for="filtroNomePaciente"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                        Paciente:</label>
+                    <input id="filtroNomePaciente" name="filtroNomePaciente" type="text"
+                        [(ngModel)]="filtroNomePaciente"
+                        class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Digite o nome do paciente">
+                </div>
+
+                <!-- Filtro por Data da Viagem -->
+                <div>
+                    <label for="filtroDataViagem"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data da Viagem:</label>
+                    <input id="filtroDataViagem" name="filtroDataViagem" type="date" [(ngModel)]="filtroDataViagem"
+                        class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+
+                <!-- Filtro por Tipo de Viagem -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo da
+                        Viagem:</label>
+                    <div class="flex items-center space-x-4 sm:space-x-6">
+                        <div>
+                            <input id="filtroTipoTodos" name="tipoViagemFiltro" type="radio" value="TODOS"
+                                [(ngModel)]="tipoViagemFiltro"
+                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600">
+                            <label for="filtroTipoTodos" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+                                Todos
+                            </label>
+                        </div>
+                        <div>
+                            <input id="filtroTipoTFD" name="tipoViagemFiltro" type="radio" value="TFD"
+                                [(ngModel)]="tipoViagemFiltro"
+                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600">
+                            <label for="filtroTipoTFD" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+                                TFD
+                            </label>
+                        </div>
+                        <div>
+                            <input id="filtroTipoConsultaExame" name="tipoViagemFiltro" type="radio"
+                                value="CONSULTA_EXAME" [(ngModel)]="tipoViagemFiltro"
+                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600">
+                            <label for="filtroTipoConsultaExame"
+                                class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+                                Consultas/Exames
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões de Ação do Filtro -->
+            <div class="mt-6 flex flex-col sm:flex-row sm:justify-end sm:space-x-3 space-y-3 sm:space-y-0">
+                <button type="button" (click)="limparFiltros()"
+                    class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                    Limpar Filtros
+                </button>
+                <button type="button" (click)="aplicarFiltro()"
+                    class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                    Aplicar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabela de Viagens -->
+        <div *ngIf="!viagemParaEdicao"
+            class="mt-2 shadow overflow-hidden border-b border-gray-200 dark:border-gray-700 sm:rounded-lg">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Paciente / Acomp.
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Data da Viagem
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Destino
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Tipo
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Ações
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <ng-container *ngIf="viagensFiltradas && viagensFiltradas.length > 0; else noData">
+                            <tr *ngFor="let viagem of viagensFiltradas" class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ viagem.nomePaciente }}
+                                    </div>
+                                    <div *ngIf="viagem.nomeAcompanhante"
+                                        class="text-xs text-gray-500 dark:text-gray-400">Acomp: {{
+                                        viagem.nomeAcompanhante }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                    {{ viagem.dataViagem | date:'dd/MM/yyyy' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                    <!-- Ajustado para mostrar cidade e estado do enderecoDestinoViagem -->
+                                    {{ viagem.enderecoDestinoViagem.cidade }} - {{ viagem.enderecoDestinoViagem.estado}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                    <span [ngClass]="{
+                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full': true,
+                    'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-100': viagem.tipoViagem === 'TFD',
+                    'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100': viagem.tipoViagem === 'CONSULTA_EXAME'
+                  }">
+                                        {{ viagem.tipoViagem === 'TFD' ? 'TFD' : (viagem.tipoViagem === 'CONSULTA_EXAME'
+                                        ? 'Consulta/Exame' : viagem.tipoViagem) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button type="button" (click)="selecionarParaEdicao(viagem)"
+                                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-500 mr-3">
+                                        Editar
+                                    </button>
+                                    <button type="button" (click)="excluirViagem(viagem)"
+                                        class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-500">
+                                        Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <ng-template #noData>
+                            <tr>
+                                <td colspan="5"
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500 dark:text-gray-300">
+                                    Nenhuma viagem encontrada para os filtros selecionados.
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Botão para Adicionar Nova Viagem -->
+        <div *ngIf="!viagemParaEdicao" class="mt-8 flex justify-end">
+            <button type="button" (click)="navegarParaCadastro()"
+                class="group relative flex items-center justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd" />
+                </svg>
+                Adicionar Nova Viagem
+            </button>
+        </div>
+
+        <!-- Seção de Edição de Viagem -->
+        <div *ngIf="viagemParaEdicao && formularioEdicao"
+            class="bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl mt-8">
+            <div>
+                <h2 class="text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+                    Editar Viagem: Paciente {{ formularioEdicao.nomePaciente }}
+                </h2>
+            </div>
+            <form #formEdicaoViagem="ngForm" class="mt-8 space-y-6" (ngSubmit)="salvarEdicaoViagem()">
+
+                <!-- Dados Gerais da Viagem -->
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Dados Gerais da
+                    Viagem</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                    <div>
+                        <label for="editNomePaciente"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                            Paciente</label>
+                        <input id="editNomePaciente" name="nomePaciente" type="text"
+                            [(ngModel)]="formularioEdicao.nomePaciente" required
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                            placeholder="Nome do Paciente">
+                    </div>
+                    <div>
+                        <label for="editNomeAcompanhante"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                            Acompanhante</label>
+                        <input id="editNomeAcompanhante" name="nomeAcompanhante" type="text"
+                            [(ngModel)]="formularioEdicao.nomeAcompanhante"
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                            placeholder="Nome do Acompanhante (Opcional)">
+                    </div>
+                    <div>
+                        <label for="editDataViagem"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data da
+                            Viagem</label>
+                        <input id="editDataViagem" name="dataViagem" type="date"
+                            [(ngModel)]="formularioEdicao.dataViagem" required
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="editTipoViagem"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo da
+                            Viagem</label>
+                        <input id="editTipoViagem" name="tipoViagem" type="text"
+                            [(ngModel)]="formularioEdicao.tipoViagem" required readonly
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm bg-gray-100 dark:bg-gray-700 cursor-not-allowed">
+                    </div>
+
+                </div>
+
+                <!-- Endereço do paciente -->
+                <div *ngIf="formularioEdicao.enderecoDestinoViagem" class="mt-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Endereço do
+                        Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                        <div class="lg:col-span-2">
+                            <label for="editRuaViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rua</label>
+                            <input id="editRuaViagem" name="ruaViagem" type="text"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.rua" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Rua">
+                        </div>
+                        <div>
+                            <label for="editNumeroViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
+                            <input id="editNumeroViagem" name="numeroViagem" type="text"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.numero" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Número">
+                        </div>
+                        <div>
+                            <label for="editBairroViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bairro</label>
+                            <input id="editBairroViagem" name="bairroViagem" type="text"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.bairro" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Bairro">
+                        </div>
+                        <div>
+                            <label for="editCidadeViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cidade</label>
+                            <input id="editCidadeViagem" name="cidadeViagem" type="text"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.cidade" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Cidade">
+                        </div>
+                        <div>
+                            <label for="editEstadoViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
+                            <select id="editEstadoViagem" name="estadoViagem"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.estado" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm">
+                                <option value="" disabled>Selecione o Estado</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="editCepViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CEP</label>
+                            <input id="editCepViagem" name="cepViagem" type="text"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.cep" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="CEP">
+                        </div>
+                        <div class="lg:col-span-3">
+                            <label for="editComplementoViagem"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Complemento</label>
+                            <input id="editComplementoViagem" name="complementoViagem" type="text"
+                                [(ngModel)]="formularioEdicao.enderecoDestinoViagem.complemento"
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Complemento (Opcional)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contatos da Viagem -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Contatos da
+                        Viagem</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                        <div>
+                            <label for="editTelefone1"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contato
+                                1</label>
+                            <input id="editTelefone1" name="telefone1" type="tel"
+                                [(ngModel)]="formularioEdicao.telefone1" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Telefone 1">
+                        </div>
+                        <div>
+                            <label for="editTelefone2"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contato 2
+                                (Opcional)</label>
+                            <input id="editTelefone2" name="telefone2" type="tel"
+                                [(ngModel)]="formularioEdicao.telefone2"
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                                placeholder="Telefone 2 (Opcional)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospitais -->
+                <div class="mt-6" *ngIf="formularioEdicao.hospitais">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Hospitais</h3>
+                    <div *ngFor="let hospital of formularioEdicao.hospitais; let i = index; trackBy: trackByIndex"
+                        class="flex items-center space-x-2 mb-2">
+                        <label [for]="'editHospital' + i" class="sr-only">Nome do Hospital {{ i + 1 }}</label>
+                        <input [id]="'editHospital' + i" [(ngModel)]="formularioEdicao.hospitais[i]"
+                            [name]="'editHospital' + i" type="text" required
+                            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm"
+                            placeholder="Nome do Hospital {{ i + 1 }}">
+                        <button *ngIf="formularioEdicao.hospitais.length > 1" type="button"
+                            (click)="removerHospitalEdicao(i)"
+                            class="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="button" (click)="adicionarHospitalEdicao()"
+                        class="mt-2 flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-600 text-sm font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Adicionar Hospital
+                    </button>
+                </div>
+
+                <!-- Horários -->
+                <div class="mt-6" *ngIf="formularioEdicao.horarios">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Horários da
+                        Consulta</h3>
+                    <div *ngFor="let horario of formularioEdicao.horarios; let i = index; trackBy: trackByIndex"
+                        class="flex items-center space-x-2 mb-2">
+                        <label [for]="'editHorario' + i" class="sr-only">Horário {{ i + 1 }}</label>
+                        <input [id]="'editHorario' + i" [(ngModel)]="formularioEdicao.horarios[i]"
+                            [name]="'editHorario' + i" type="time" required
+                            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm sm:text-sm">
+                        <button *ngIf="formularioEdicao.horarios.length > 1" type="button"
+                            (click)="removerHorarioEdicao(i)"
+                            class="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="button" (click)="adicionarHorarioEdicao()"
+                        class="mt-2 flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-600 text-sm font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Adicionar Horário
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-end space-x-4 pt-6">
+                    <button type="button" (click)="cancelarEdicaoViagem()"
+                        class="group relative py-2 px-4 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                        Cancelar
+                    </button>
+                    <button type="submit" [disabled]="formEdicaoViagem.invalid || isLoading"
+                        class="group relative py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+                        <span *ngIf="!isLoading">Salvar Alterações</span>
+                        <span *ngIf="isLoading">Salvando...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

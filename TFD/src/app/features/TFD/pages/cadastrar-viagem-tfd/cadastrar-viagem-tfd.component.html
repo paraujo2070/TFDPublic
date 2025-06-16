@@ -1,0 +1,209 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl w-full space-y-8 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100" [textContent]="tituloPagina">
+      </h2>
+      <!-- Seletor de Tipo de Viagem -->
+      <div class="mt-4 mb-6">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo da Viagem:</label>
+        <div class="flex items-center space-x-6">
+          <div>
+            <input id="tipoTFD" name="tipoViagem" type="radio" value="TFD" [(ngModel)]="tipoViagemSelecionado" (ngModelChange)="atualizarContextoViagem()"
+                   class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600">
+            <label for="tipoTFD" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+              TFD
+            </label>
+          </div>
+          <div>
+            <input id="tipoConsultaExame" name="tipoViagem" type="radio" value="CONSULTA_EXAME" [(ngModel)]="tipoViagemSelecionado" (ngModelChange)="atualizarContextoViagem()"
+                   class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600">
+            <label for="tipoConsultaExame" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+              Consultas/Exames
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="mt-8 space-y-6" (ngSubmit)="cadastrarViagem()" #formularioViagem="ngForm">
+
+      <!-- Dados do Paciente e Acompanhante -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Dados Gerais</h3>
+        <div>
+          <label for="nomePaciente" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Paciente</label>
+          <input id="nomePaciente" name="nomePaciente" type="text" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Nome do Paciente">
+        </div>
+        <div>
+          <label for="nomeAcompanhante" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Acompanhante</label>
+          <input id="nomeAcompanhante" name="nomeAcompanhante" type="text"
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Nome do Acompanhante (Opcional)">
+        </div>
+        <div>
+          <label for="dataViagem" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data da
+            Viagem</label>
+          <input id="dataViagem" name="dataViagem" type="date" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Data da Viagem">
+        </div>
+      </div>
+
+      <!-- Endereço -->
+      <div class="mt-6"> <!-- Adiciona margem superior para separar -->
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Endereço</h3>
+        <div>
+          <label for="rua" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rua</label>
+          <input id="rua" name="rua" type="text" autocomplete="street-address" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Rua">
+        </div>
+        <div>
+          <label for="numero" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
+          <input id="numero" name="numero" type="text" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Número">
+        </div>
+        <div>
+          <label for="bairro" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bairro</label>
+          <input id="bairro" name="bairro" type="text" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Bairro">
+        </div>
+        <div>
+          <label for="cidade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cidade</label>
+          <input id="cidade" name="cidade" type="text" autocomplete="address-level2" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Cidade">
+        </div>
+        <div>
+          <label for="estadoResidencia" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
+          <select id="estadoResidencia" name="estadoResidencia" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="" disabled selected class="text-gray-500 dark:text-gray-400">Selecione o Estado</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AP">Amapá</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SP">São Paulo</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+          </select>
+        </div>
+       <div>
+          <label for="cep" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CEP</label>
+          <input id="cep" name="cep" type="text" autocomplete="postal-code" required
+            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="CEP">
+        </div>
+        <div class="mb-6"> <!-- Mantém a margem inferior para separar -->
+          <label for="complemento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Complemento</label>
+          <input id="complemento" name="complemento" type="text"
+          class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          placeholder="Complemento (Opcional)">
+        </div>
+      </div>
+
+      <!-- Telefones -->
+      <div class="mt-6 mb-6"> <!-- Adiciona margem superior e mantém a inferior -->
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Contatos</h3>
+        <div>
+          <label for="complemento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contato 1</label>
+          <input id="telefone1" name="telefone1" type="tel" autocomplete="tel" required
+            class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Telefone 1">
+        </div>
+        <div>
+          <label for="complemento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contato 2</label>
+          <input id="telefone2" name="telefone2" type="tel" autocomplete="tel"
+            class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Telefone 2 (Opcional)">
+        </div>
+      </div>
+
+      <!-- Hospitais -->
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Hospitais</h3>
+        <div *ngFor="let hospital of hospitais; let i = index" class="flex items-center space-x-2 mb-2">
+          <label [for]="'hospital' + i" class="sr-only">Nome do Hospital {{ i + 1 }}</label>
+          <input [id]="'hospital' + i" [(ngModel)]="hospitais[i]" [name]="'hospital' + i" type="text" required
+            class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Nome do Hospital {{ i + 1 }}">
+          <button *ngIf="hospitais.length > 1" type="button" (click)="removerHospital(i)"
+            class="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <button type="button" (click)="adicionarHospital()"
+          class="mt-2 flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-600 text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd" />
+          </svg>
+          Adicionar Hospital
+        </button>
+      </div>
+
+      <!-- Horários -->
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Horários da Consulta</h3>
+        <div *ngFor="let horario of horarios; let i = index" class="flex items-center space-x-2 mb-2">
+          <label [for]="'horario' + i" class="sr-only">Horário {{ i + 1 }}</label>
+          <input [id]="'horario' + i" [(ngModel)]="horarios[i]" [name]="'horario' + i" type="time" required
+            class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+          <button *ngIf="horarios.length > 1" type="button" (click)="removerHorario(i)"
+            class="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <button type="button" (click)="adicionarHorario()"
+          class="mt-2 flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-600 text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd" />
+          </svg>
+          Adicionar Horário
+        </button>
+      </div>
+
+      <!-- Botão de Cadastro -->
+      <div>
+        <button type="submit"
+          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+          Cadastrar Viagem
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,181 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="container mx-auto space-y-8">
+
+    <!-- Seção de Filtro e Ações -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
+        Gerenciar Veículos
+      </h2>
+      <form (ngSubmit)="buscarVeiculos()" class="space-y-4 sm:space-y-0 sm:flex sm:space-x-4 sm:items-end">
+        <div class="flex-grow">
+          <label for="filtroPlaca" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Filtrar por Placa
+          </label>
+          <input id="filtroPlaca" name="filtroPlaca" type="text" [(ngModel)]="filtroPlaca"
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Digite a placa do veículo">
+        </div>
+        <button type="submit"
+                [disabled]="isLoading"
+                class="w-full sm:w-auto flex justify-center py-3 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+          <span *ngIf="!isLoading">Buscar</span>
+          <span *ngIf="isLoading">Buscando...</span>
+        </button>
+        <button type="button" (click)="listarTodosVeiculos()" [disabled]="isLoading"
+                class="w-full sm:w-auto flex justify-center py-3 px-6 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+          Listar Todos
+        </button>
+      </form>
+    </div>
+
+    <!-- Seção de Listagem de Veículos -->
+    <div *ngIf="!veiculoParaEdicao" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        Veículos Encontrados
+      </h3>
+      <div *ngIf="isLoading" class="text-center py-4 text-gray-600 dark:text-gray-400">Carregando veículos...</div>
+      
+      <div *ngIf="!isLoading && veiculosFiltrados.length === 0" class="text-center py-4 text-gray-600 dark:text-gray-400">
+        Nenhum veículo encontrado com os critérios informados.
+      </div>
+
+      <div *ngIf="!isLoading && veiculosFiltrados.length > 0" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Placa</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Renavam</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Qtd. Passageiros</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Marca</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Modelo</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Ano</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cor</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Habilitação</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let veiculo of veiculosFiltrados" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ veiculo.placa }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ veiculo.renavam }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ veiculo.qtdPassageiros }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ veiculo.marca }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ veiculo.modelo }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ veiculo.anoVeiculo }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ veiculo.cor }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                <span *ngIf="veiculo.tipoA">A </span>
+                <span *ngIf="veiculo.tipoB">B </span>
+                <span *ngIf="veiculo.tipoC">C </span>
+                <span *ngIf="veiculo.tipoD">D </span>
+                <span *ngIf="veiculo.tipoE">E </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                <button (click)="selecionarParaEdicao(veiculo)"
+                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-150 ease-in-out">
+                  Editar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Seção de Edição de Veículo -->
+    <div *ngIf="veiculoParaEdicao && formularioEdicao" class="bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+          Editar Veículo: {{ veiculoParaEdicao.placa }}
+        </h2>
+      </div>
+      <form class="mt-8 space-y-6" (ngSubmit)="salvarEdicao()">
+        <div>
+          <label for="editPlaca" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Placa do Veículo</label>
+          <input id="editPlaca" name="editPlaca" type="text" [(ngModel)]="formularioEdicao.placa" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Placa (Ex: ABC1D23 ou ABC1234)"
+                 maxlength="7">
+        </div>
+        <div>
+          <label for="editRenavam" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Renavam</label>
+          <input id="editRenavam" name="editRenavam" type="text" [(ngModel)]="formularioEdicao.renavam" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Renavam (somente números)"
+                 pattern="[0-9]*"
+                 maxlength="11">
+        </div>
+        <div>
+          <label for="editQtdPassageiros" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Quantidade de Passageiros</label>
+          <input id="editQtdPassageiros" name="editQtdPassageiros" type="number" [(ngModel)]="formularioEdicao.qtdPassageiros" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Quantidade de Passageiros"
+                 min="1">
+        </div>
+        <div>
+          <label for="editMarca" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Marca</label>
+          <input id="editMarca" name="editMarca" type="text" [(ngModel)]="formularioEdicao.marca" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Marca">
+        </div>
+        <div>
+          <label for="editModelo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Modelo</label>
+          <input id="editModelo" name="editModelo" type="text" [(ngModel)]="formularioEdicao.modelo" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Modelo">
+        </div>
+        <div>
+          <label for="editAnoVeiculo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ano do Veículo</label>
+          <input id="editAnoVeiculo" name="editAnoVeiculo" type="number" [(ngModel)]="formularioEdicao.anoVeiculo" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Ano do Veículo">
+        </div>
+        <div>
+          <label for="editCor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cor Predominante</label>
+          <input id="editCor" name="editCor" type="text" [(ngModel)]="formularioEdicao.cor" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Cor Predominante (Ex: Preto)">
+        </div>
+        <fieldset class="pt-3 pb-1 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700">
+            <legend class="sr-only">Tipo de Habilitação</legend>
+            <div class="text-sm text-gray-700 dark:text-gray-300 mb-2">Categoria de Habilitação Necessária:</div>
+            <div class="space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
+              <div class="flex items-center">
+                <input id="editTipoA" name="editTipoA" type="checkbox" [(ngModel)]="formularioEdicao.tipoA" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoA" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">A</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoB" name="editTipoB" type="checkbox" [(ngModel)]="formularioEdicao.tipoB" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoB" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">B</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoC" name="editTipoC" type="checkbox" [(ngModel)]="formularioEdicao.tipoC" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoC" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">C</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoD" name="editTipoD" type="checkbox" [(ngModel)]="formularioEdicao.tipoD" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoD" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">D</label>
+              </div>
+              <div class="flex items-center">
+                <input id="editTipoE" name="editTipoE" type="checkbox" [(ngModel)]="formularioEdicao.tipoE" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+                <label for="editTipoE" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">E</label>
+              </div>
+            </div>
+          </fieldset>
+
+        <div class="flex items-center justify-end space-x-4 pt-4">
+          <button type="button" (click)="cancelarEdicao()"
+                  class="group relative py-3 px-6 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="isLoading"
+                  class="group relative py-3 px-6 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition duration-150 ease-in-out">
+            <span *ngIf="!isLoading">Salvar Alterações</span>
+            <span *ngIf="isLoading">Salvando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

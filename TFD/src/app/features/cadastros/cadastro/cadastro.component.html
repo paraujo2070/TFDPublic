@@ -1,0 +1,53 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+        Crie uma conta
+      </h2>
+    </div>
+<form class="mt-8 space-y-6" (ngSubmit)="cadastrar()">
+      <!-- Campos do formulário -->
+      <div>
+        <label for="nomeCompleto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
+          <input id="nomeCompleto" name="nomeCompleto" type="text" autocomplete="name" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Nome Completo">
+        </div>
+        <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Email">
+        </div>
+        <div>
+        <label for="senha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Senha</label>
+          <input id="senha" name="senha" type="password" autocomplete="new-password" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Senha">
+        </div>
+         <div>
+        <label for="confirmarSenha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmar Senha</label>
+          <input id="confirmarSenha" name="confirmarSenha" type="password" autocomplete="new-password" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                 placeholder="Confirmar Senha">
+        </div>
+        <div>
+        <label for="cargo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cargo</label>
+          <select id="cargo" name="cargo" required
+                  class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="" disabled selected class="text-gray-500 dark:text-gray-400">Selecione o cargo</option>
+            <option value="coordenador" class="text-gray-900 dark:text-gray-100">Coordenador</option>
+            <option value="operador" class="text-gray-900 dark:text-gray-100">Operador</option>
+            <option value="secretario" class="text-gray-900 dark:text-gray-100">Secretário (a)</option>
+          </select>
+        </div>
+
+      <div>
+        <button type="submit"
+                class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+          Cadastrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

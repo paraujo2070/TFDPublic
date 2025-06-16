@@ -1,0 +1,111 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="container mx-auto space-y-8">
+
+    <!-- Seção de Filtros -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center">Gerenciar Usuários</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 items-end">
+        <!-- Filtro por Nome do Usuário -->
+        <div class="md:col-span-2">
+          <label for="filtroNomeUsuario"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Usuário:</label>
+          <input id="filtroNomeUsuario" name="filtroNomeUsuario" type="text"
+            [(ngModel)]="filtroNomeUsuario" (input)="aplicarFiltro()"
+            class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Digite o nome do usuário">
+        </div>
+      </div>
+      <!-- Botões de Ação do Filtro -->
+      <div class="mt-6 flex flex-col sm:flex-row sm:justify-end sm:space-x-3 space-y-3 sm:space-y-0">
+        <button type="button" (click)="limparFiltros()"
+          class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+          Limpar Filtro
+        </button>
+      </div>
+    </div>
+
+    <!-- Seção de Listagem de Usuários -->
+    <div *ngIf="!usuarioEmEdicao" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        Lista de Usuários
+      </h3>
+      <div class="overflow-x-auto">
+
+            <!-- Listagem de Usuários (Tabela ou Lista) -->
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nome</th>
+                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cargo</th>
+                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-right text-xs leading-4 font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Ações</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  <tr *ngFor="let usuario of usuariosFiltrados" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td class="px-6 py-4 whitespace-nowrap">{{ usuario.nomeCompleto }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ usuario.email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ usuario.cargo }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right font-medium">
+                      <button (click)="editarUsuario(usuario)" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-500 focus:outline-none">Editar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- Mensagem caso não haja usuários -->
+      </div>
+      <p *ngIf="!usuariosFiltrados || usuariosFiltrados.length === 0" class="text-center py-4 text-gray-600 dark:text-gray-400">Nenhum usuário encontrado para o filtro aplicado.</p>
+    </div>
+
+    <!-- Seção de Edição de Usuário -->
+    <div *ngIf="usuarioEmEdicao" class="bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+            <!-- Formulário de Edição -->
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-6">Editar Usuário: {{ usuarioEmEdicao.nomeCompleto }}</h2>
+              <form (ngSubmit)="salvarUsuario()" #editForm="ngForm" class="mt-6 space-y-4">
+                <div>
+                  <label for="nomeCompleto" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome Completo</label>
+                  <div class="mt-1">
+                    <input type="text" name="nomeCompleto" id="nomeCompleto" [(ngModel)]="usuarioEmEdicao.nomeCompleto" required class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Nome Completo">
+                  </div>
+                </div>
+
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <div class="mt-1">
+                    <input type="email" name="email" id="email" [(ngModel)]="usuarioEmEdicao.email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Email">
+                  </div>
+                </div>
+
+                <div>
+                  <label for="cargo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cargo</label>
+                  <div class="mt-1">
+                    <select id="cargo" name="cargo" [(ngModel)]="usuarioEmEdicao.cargo" required class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <option value="coordenador">Coordenador</option>
+                      <option value="operador">Operador</option>
+                      <option value="secretario">Secretário (a)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="ativo" class="inline-flex items-center">
+                    <input type="checkbox" name="ativo" id="ativo" [(ngModel)]="usuarioEmEdicao.ativo" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-indigo-500">
+                    <span class="ml-2 block text-sm text-gray-900 dark:text-gray-100">Ativo</span>
+                  </label>
+                </div>
+
+                <div class="pt-5">
+                  <div class="flex justify-end">
+                    <button type="button" (click)="cancelarEdicao()" class="px-4 py-2 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      Cancelar
+                    </button>
+                    <button type="submit" [disabled]="editForm.invalid" class="ml-3 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+                      Salvar
+                    </button>
+                  </div>
+                </div>
+              </form>
+    </div>
+
+  </div>
+</div>

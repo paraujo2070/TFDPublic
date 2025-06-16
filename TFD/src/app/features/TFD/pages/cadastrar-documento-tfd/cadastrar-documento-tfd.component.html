@@ -1,0 +1,131 @@
+<div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+    
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-2xl">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
+                Cadastro de Declaração de Comparecimento TFD
+            </h2>
+
+            <form (ngSubmit)="cadastrarDocumento()" #documentoForm="ngForm" class="space-y-8">
+
+                <!-- Dados do Documento -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Informações do
+                        Pagamento</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="mesPagamento"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mês de
+                                Pagamento</label>
+                            <select id="mesPagamento" name="mesPagamento" [(ngModel)]="documento.mesPagamento" required
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="" disabled selected>Selecione o mês</option>
+                                <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nome }}</option>
+                            </select>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label for="nomePaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                                Paciente</label>
+                            <input type="text" id="nomePaciente" name="nomePaciente"
+                                [(ngModel)]="documento.nomePaciente" required
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome completo do paciente">
+                        </div>
+                        
+                         <div class="md:col-span-2">
+                            <label for="cpfPaciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF do
+                                Paciente</label>
+                            <input type="text" id="cpfPaciente" name="cpfPaciente" [(ngModel)]="documento.cpfPaciente" required
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="000.000.000-00">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label for="nomeAcompanhante"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do
+                                Acompanhante (Opcional)</label>
+                            <input type="text" id="nomeAcompanhante" name="nomeAcompanhante"
+                                [(ngModel)]="documento.nomeAcompanhante"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Nome completo do acompanhante, se houver">
+                        </div>
+
+
+                        <div>
+                            <label for="valorPago"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor Pago por
+                                Paciente (R$)</label>
+                            <input type="number" id="valorPago" name="valorPago" [(ngModel)]="documento.valorPago"
+                                required min="0" step="0.01"
+                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Ex: 150.00">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Este valor não poderá ser alterado
+                                após o cadastro inicial do documento.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seleção de Dias -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Dias a Serem
+                        Pagos</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Selecione os dias do mês correspondentes ao
+                        pagamento.</p>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                        Quantidade de dias selecionados: {{ getQuantidadeDiasSelecionados() }}
+                    </p>
+                    <div class="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-8 gap-2">
+                        <div *ngFor="let dia of diasDoMes; let i = index"
+                            class="flex items-center p-2 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700/50">
+                            <input type="checkbox" [id]="'dia-' + dia.numero" [name]="'dia-' + dia.numero"
+                                [(ngModel)]="dia.selecionado"
+                                class="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:bg-gray-900 dark:ring-offset-gray-800">
+                            <label [for]="'dia-' + dia.numero"
+                                class="ml-2 text-sm font-medium text-gray-800 dark:text-gray-200">{{ dia.numero
+                                }}</label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Upload de Declaração -->
+                <section>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b pb-2">Comprovante
+                    </h3>
+                    <div>
+                        <label for="declaracao"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Declaração de
+                            Comparecimento (PDF)</label>
+                        <input type="file" id="declaracao" name="declaracao" (change)="onFileSelected($event)"
+                            accept=".pdf" required
+                            class="block w-full text-sm text-gray-500 dark:text-gray-400
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-md file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-indigo-50 dark:file:bg-indigo-900 file:text-indigo-700 dark:file:text-indigo-300
+                          hover:file:bg-indigo-100 dark:hover:file:bg-indigo-800
+                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                        <div *ngIf="arquivoSelecionado" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                            <p>Arquivo selecionado: {{ arquivoSelecionado.name }}</p>
+                        </div>
+                        <p *ngIf="!arquivoSelecionado && documentoForm.submitted && documentoForm.controls['declaracao']?.errors?.['required']"
+                            class="mt-1 text-xs text-red-500 dark:text-red-400">
+                            A declaração é obrigatória.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Botão de Cadastro -->
+                <div class="pt-6">
+                    <button type="submit"
+                        [disabled]="!documentoForm.form.valid || getQuantidadeDiasSelecionados() === 0"
+                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 dark:disabled:bg-gray-600">
+                        Cadastrar Documento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>

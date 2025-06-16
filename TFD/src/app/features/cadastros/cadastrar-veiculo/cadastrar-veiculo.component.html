@@ -1,0 +1,90 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-2xl">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+        Cadastrar Novo Veículo
+      </h2>
+    </div>
+   <form class="mt-8 space-y-6" (ngSubmit)="cadastrarVeiculo()">
+      <div>
+        <label for="placa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Placa do Veículo</label>
+        <input id="placa" name="placa" type="text" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Placa (Ex: ABC1D23 ou ABC1234)"
+               maxlength="7">
+      </div>
+      <div>
+        <label for="renavam" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Renavam</label>
+        <input id="renavam" name="renavam" type="text" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Renavam (somente números)"
+               pattern="[0-9]*"
+               maxlength="11">
+      </div>
+      <div>
+        <label for="qtdPassageiros" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Quantidade de Passageiros</label>
+        <input id="qtdPassageiros" name="qtdPassageiros" type="number" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Quantidade de Passageiros"
+               min="1">
+      </div>
+      <div>
+        <label for="marca" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Marca</label>
+        <input id="marca" name="marca" type="text" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Marca">
+      </div>
+      <div>
+        <label for="modelo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Modelo</label>
+        <input id="modelo" name="modelo" type="text" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Modelo">
+      </div>
+      <div>
+        <label for="anoVeiculo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ano do Veículo</label>
+        <input id="anoVeiculo" name="anoVeiculo" type="number" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Ano do Veículo">
+      </div>
+      <div>
+        <label for="cor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cor Predominante</label>
+        <input id="cor" name="cor" type="text" autocomplete="off" required
+               class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Cor Predominante (Ex: Preto)">
+      </div>
+      <fieldset class="pt-3 pb-1 px-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"> 
+          <legend class="sr-only">Tipo de Habilitação</legend> 
+          <div class="text-sm text-gray-700 dark:text-gray-300 mb-2">Categoria de Habilitação Necessária:</div>
+          <div class="space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
+            <div class="flex items-center">
+              <input id="tipoA" name="tipoA" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+              <label for="tipoA" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">A</label>
+            </div>
+            <div class="flex items-center">
+              <input id="tipoB" name="tipoB" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+              <label for="tipoB" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">B</label>
+            </div>
+            <div class="flex items-center">
+              <input id="tipoC" name="tipoC" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+              <label for="tipoC" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">C</label>
+            </div>
+            <div class="flex items-center">
+              <input id="tipoD" name="tipoD" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+              <label for="tipoD" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">D</label>
+            </div>
+            <div class="flex items-center">
+              <input id="tipoE" name="tipoE" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-500 dark:bg-gray-600 rounded focus:ring-indigo-500">
+              <label for="tipoE" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">E</label>
+            </div>
+          </div>
+        </fieldset>
+
+      <div>
+        <button type="submit"
+                class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+          Cadastrar Veículo
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

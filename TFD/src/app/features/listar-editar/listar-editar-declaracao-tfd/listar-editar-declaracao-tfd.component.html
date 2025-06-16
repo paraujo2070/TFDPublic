@@ -1,0 +1,238 @@
+<div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-5xl w-full space-y-8 bg-white dark:bg-gray-800 p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl mx-auto">
+
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100">
+               Gerenciar Declarações de Comparecimento TFD
+            </h2>
+
+            <!-- Filter Section -->
+            <section class="mt-8 mb-6 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6 border-b border-gray-300 dark:border-gray-600 pb-3">Filtrar Declarações</h3>
+                <form (ngSubmit)="aplicarFiltros()" #filtroForm="ngForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                        <div>
+                            <label for="filtroNomePaciente" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Paciente</label>
+                            <input type="text" id="filtroNomePaciente" name="filtroNomePaciente" [(ngModel)]="filtros.nomePaciente"
+                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   placeholder="Digite o nome do paciente">
+                        </div>
+
+                        <div>
+                            <label for="filtroMesPagamento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mês de Pagamento</label>
+                            <select id="filtroMesPagamento" name="filtroMesPagamento" [(ngModel)]="filtros.mesPagamento"
+                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="" selected>Todos os meses</option>
+                                <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nome }}</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="filtroStatus" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                            <select id="filtroStatus" name="filtroStatus" [(ngModel)]="filtros.status"
+                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="" selected>Todos</option>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-col sm:flex-row sm:justify-end sm:space-x-3 space-y-3 sm:space-y-0">
+                        <button type="button" (click)="listarTudo()"
+                                class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-500 shadow-sm px-4 py-2 bg-white dark:bg-gray-600 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                            Listar Tudo
+                        </button>
+                        <button type="submit"
+                                class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- List of Declarations -->
+            <section *ngIf="!documentoEditavel" class="mt-8">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Declarações Encontradas</h3>
+                <div *ngIf="isLoading" class="text-center py-10">
+                    <p class="text-gray-600 dark:text-gray-400">Carregando declarações...</p>
+                    <!-- Você pode adicionar um spinner aqui -->
+                </div>
+
+                <div *ngIf="!isLoading && declaracoesFiltradas && declaracoesFiltradas.length > 0; else nenhumaDeclaracaoEncontrada" class="space-y-4">
+                    <div *ngFor="let declaracao of declaracoesFiltradas"
+                         class="p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <div class="mb-3 sm:mb-0">
+                                <p class="text-lg font-semibold text-indigo-600 dark:text-indigo-400">{{ declaracao.nomePaciente }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    CPF: {{ declaracao.cpfPaciente }}
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Mês de Referência: <span class="font-medium">{{ getNomeMes(declaracao.mesPagamento) }}</span>
+                                </p>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-3 w-full sm:w-auto">
+                                <span [ngClass]="{
+                                    'px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full mb-2 sm:mb-0': true,
+                                    'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100': declaracao.status === 'ativo',
+                                    'bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100': declaracao.status === 'inativo',
+                                    'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200': declaracao.status !== 'ativo' && declaracao.status !== 'inativo'
+                                }">
+                                    {{ declaracao.status | titlecase }}
+                                </span>
+                                <button (click)="selecionarParaEdicao(declaracao)"
+                                        class="w-full sm:w-auto text-sm text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium py-2 px-3 rounded-md border border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors duration-150">
+                                    Editar
+                                </button>
+                            </div>
+                        </div>
+                         <div *ngIf="declaracao.nomeAcompanhante" class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Acompanhante: {{ declaracao.nomeAcompanhante }}</p>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #nenhumaDeclaracaoEncontrada>
+                    <div *ngIf="!isLoading && (!declaracoesFiltradas || declaracoesFiltradas.length === 0)" class="text-center py-10">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Nenhuma declaração encontrada</h3>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {{ filtroAplicado ? 'Tente ajustar seus filtros de busca.' : 'Não há declarações cadastradas ou os filtros não retornaram resultados.' }}
+                        </p>
+                    </div>
+                </ng-template>
+            </section>
+
+            <!-- Edit Form Section -->
+            <div *ngIf="documentoEditavel" class="mt-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
+                    Editar Declaração de Comparecimento TFD
+                </h2>
+
+                <form (ngSubmit)="salvarAlteracoes()" #editDocumentoForm="ngForm" class="space-y-8">
+
+                    <!-- Informações do Pagamento -->
+                    <section>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">Informações do Pagamento</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="mesPagamentoEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mês de Pagamento</label>
+                                <select id="mesPagamentoEdit" name="mesPagamentoEdit" [(ngModel)]="documentoEditavel.mesPagamento" required
+                                        (change)="carregarDiasDoMesEditavel()"
+                                        class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="" disabled>Selecione o mês</option>
+                                    <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nome }}</option>
+                                </select>
+                                <p *ngIf="editDocumentoForm.submitted && editDocumentoForm.controls['mesPagamentoEdit']?.errors?.['required']" class="mt-1 text-xs text-red-500 dark:text-red-400">Mês de pagamento é obrigatório.</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="nomePacienteEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Paciente</label>
+                                <input type="text" id="nomePacienteEdit" name="nomePacienteEdit" [(ngModel)]="documentoEditavel.nomePaciente" required
+                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                       placeholder="Nome completo do paciente">
+                                <p *ngIf="editDocumentoForm.submitted && editDocumentoForm.controls['nomePacienteEdit']?.errors?.['required']" class="mt-1 text-xs text-red-500 dark:text-red-400">Nome do paciente é obrigatório.</p>
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label for="cpfPacienteEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF do Paciente</label>
+                                <input type="text" id="cpfPacienteEdit" name="cpfPacienteEdit" [(ngModel)]="documentoEditavel.cpfPaciente" required
+                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                       placeholder="000.000.000-00">
+                                 <p *ngIf="editDocumentoForm.submitted && editDocumentoForm.controls['cpfPacienteEdit']?.errors?.['required']" class="mt-1 text-xs text-red-500 dark:text-red-400">CPF do paciente é obrigatório.</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="nomeAcompanhanteEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Acompanhante (Opcional)</label>
+                                <input type="text" id="nomeAcompanhanteEdit" name="nomeAcompanhanteEdit" [(ngModel)]="documentoEditavel.nomeAcompanhante"
+                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                       placeholder="Nome completo do acompanhante, se houver">
+                            </div>
+
+                            <div>
+                                <label for="valorPagoEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor Pago por Paciente (R$)</label>
+                                <input type="number" id="valorPagoEdit" name="valorPagoEdit" [(ngModel)]="documentoEditavel.valorPago"
+                                       required readonly 
+                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-600 rounded-md shadow-sm focus:outline-none sm:text-sm cursor-not-allowed"
+                                       placeholder="Ex: 150.00">
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Este valor não pode ser alterado.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Seleção de Dias -->
+                    <section>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">Dias a Serem Pagos</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Selecione os dias do mês correspondentes ao pagamento.</p>
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                            Quantidade de dias selecionados: {{ getQuantidadeDiasSelecionadosEdit() }}
+                        </p>
+                        <div class="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-8 gap-2">
+                            <div *ngFor="let dia of diasDoMesEditavel; let i = index"
+                                 class="flex items-center p-2 border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition-colors">
+                                <input type="checkbox" [id]="'diaEdit-' + dia.numero" [name]="'diaEdit-' + dia.numero"
+                                       [(ngModel)]="dia.selecionado"
+                                       class="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-500 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:bg-gray-800 dark:ring-offset-gray-800 cursor-pointer">
+                                <label [for]="'diaEdit-' + dia.numero"
+                                       class="ml-2 text-sm font-medium text-gray-800 dark:text-gray-200 cursor-pointer">{{ dia.numero }}</label>
+                            </div>
+                        </div>
+                        <p *ngIf="editDocumentoForm.submitted && getQuantidadeDiasSelecionadosEdit() === 0" class="mt-1 text-xs text-red-500 dark:text-red-400">
+                            Selecione pelo menos um dia.
+                        </p>
+                    </section>
+
+                    <!-- Upload de Declaração -->
+                    <section>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">Comprovante</h3>
+                        <div>
+                            <div *ngIf="documentoEditavel.nomeArquivoAtual && !novoArquivoSelecionadoEdit" class="mb-3 p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-md border border-indigo-200 dark:border-indigo-700">
+                                <p class="text-sm text-gray-700 dark:text-gray-300">Comprovante atual: 
+                                    <a href="{{ documentoEditavel.urlArquivoAtual }}" target="_blank" class="font-medium text-indigo-600 dark:text-indigo-400 hover:underline">{{ documentoEditavel.nomeArquivoAtual }}</a>
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Para substituir, selecione um novo arquivo abaixo.</p>
+                            </div>
+
+                            <label for="declaracaoEditFile" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                {{ (documentoEditavel.nomeArquivoAtual && !novoArquivoSelecionadoEdit) ? 'Substituir Declaração (PDF)' : 'Selecionar Nova Declaração de Comparecimento (PDF)'}}
+                            </label>
+                            <input type="file" id="declaracaoEditFile" name="declaracaoEditFile" (change)="onFileSelectedEdit($event)"
+                                   accept=".pdf" #fileInputEdit
+                                   class="block w-full text-sm text-gray-500 dark:text-gray-400
+                                          file:mr-4 file:py-2 file:px-4
+                                          file:rounded-md file:border-0
+                                          file:text-sm file:font-semibold
+                                          file:bg-indigo-50 dark:file:bg-indigo-700 file:text-indigo-700 dark:file:text-indigo-200
+                                          hover:file:bg-indigo-100 dark:hover:file:bg-indigo-600
+                                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800
+                                          border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer">
+                            
+                            <div *ngIf="novoArquivoSelecionadoEdit" class="mt-2 text-sm text-green-600 dark:text-green-400">
+                                <p>Novo arquivo selecionado: {{ novoArquivoSelecionadoEdit.name }}</p>
+                            </div>
+                            <p *ngIf="editDocumentoForm.submitted && !novoArquivoSelecionadoEdit" class="mt-1 text-xs text-red-500 dark:text-red-400">
+                                Um novo arquivo de declaração (PDF) é obrigatório para salvar as alterações.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Botões de Ação -->
+                    <div class="pt-6 flex flex-col sm:flex-row-reverse sm:space-x-reverse sm:space-x-3 space-y-3 sm:space-y-0">
+                        <button type="submit"                        
+                                [disabled]="!editDocumentoForm.form.valid || (getQuantidadeDiasSelecionadosEdit() === 0) || !novoArquivoSelecionadoEdit || isLoadingSalvar"
+                                class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed sm:text-sm">
+                            <span *ngIf="!isLoadingSalvar">Salvar Alterações</span>
+                            <span *ngIf="isLoadingSalvar">Salvando...</span>
+                        </button>
+                        <button type="button" (click)="cancelarEdicao()"
+                                [disabled]="isLoadingSalvar"
+                                class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-500 shadow-sm px-6 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 sm:text-sm">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
